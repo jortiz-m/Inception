@@ -1,0 +1,12 @@
+services:
+  nginx:
+    container_name: nginx
+    build: ./requeriments/nginx
+#    ports:
+#      - "443:443"
+    restart: on-failure
+
+  mariadb:
+    container_name: mariadb
+    build: ./requeriments/mariadb
+    restart: on-failure 
