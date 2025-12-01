@@ -2,11 +2,53 @@ services:
   nginx:
     container_name: nginx
     build: ./requeriments/nginx
-#    ports:
-#      - "443:443"
+    ports:
+      - "443:443"
     restart: on-failure
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
 
   mariadb:
     container_name: mariadb
     build: ./requeriments/mariadb
-    restart: on-failure 
+    restart: on-failure
+    networks:
+      - inception
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+  wordpress:
+    container_name: wordpress
+    build: ./requeriments/wordpress
+    restart: on-failure
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    volumes:
+      - wordpress_data:/var/www/html/wordpress
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - WP_URL=${WP_URL}
+      - WP_TITLE=${WP_TITLE}
+      - WP_ADMIN_USER=${WP_ADMIN_USER}
+      - WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD}
+      - WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+  wordpress_data:
