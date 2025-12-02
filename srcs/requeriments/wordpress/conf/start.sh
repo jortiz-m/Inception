@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Esperar a que MariaDB esté listo
+# Wait for MariaDB to be ready
 echo "Waiting MariaDB..."
 while ! mariadb -h mariadb -u ${MYSQL_USER} -p${MYSQL_PASSWORD} -e "SELECT 1" > /dev/null 2>&1; do
     sleep 2
@@ -9,10 +9,12 @@ echo "MariaDB is ready!"
 
 cd /var/www/html/wordpress
 
-# Solo configurar si no existe wp-config.php
+# Descargar WordPress si no existe
 if [ ! -f wp-config.php ]; then
-    echo "Configurando WordPress..."
+    echo "Descargando WordPress..."
+    wp core download --allow-root
     
+    echo "Configurando WordPress..."
     wp config create \
         --dbname=${MYSQL_DATABASE} \
         --dbuser=${MYSQL_USER} \
@@ -21,17 +23,23 @@ if [ ! -f wp-config.php ]; then
         --allow-root
 
     wp core install \
-        --url=${WP_URL} \
+        --url=https://${WP_URL} \
         --title="${WP_TITLE}" \
         --admin_user=${WP_ADMIN_USER} \
         --admin_password=${WP_ADMIN_PASSWORD} \
         --admin_email=${WP_ADMIN_EMAIL} \
         --allow-root
+
+    # Crear segundo usuario (no admin)
+    wp user create ${WP_USER} ${WP_USER_EMAIL} \
+        --role=author \
+        --user_pass=${WP_USER_PASSWORD} \
+        --allow-root
     
-    echo "WordPress instalado!"
+    echo "WordPress is ready!"
 else
-    echo "WordPress ya está configurado."
+    echo "WordPress is already configured."
 fi
 
-# Ejecutar PHP-FPM en primer plano
+# Run PHP-FPM in the foreground
 php-fpm8.2 -F
