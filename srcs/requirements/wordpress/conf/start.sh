@@ -9,12 +9,12 @@ echo "MariaDB is ready!"
 
 cd /var/www/html/wordpress
 
-# Descargar WordPress si no existe
+# Download WordPress if it doesn't exist
 if [ ! -f wp-config.php ]; then
-    echo "Descargando WordPress..."
+    echo "Downloading WordPress..."
     wp core download --allow-root
     
-    echo "Configurando WordPress..."
+    echo "Configuring WordPress..."
     wp config create \
         --dbname=${MYSQL_DATABASE} \
         --dbuser=${MYSQL_USER} \
@@ -30,7 +30,7 @@ if [ ! -f wp-config.php ]; then
         --admin_email=${WP_ADMIN_EMAIL} \
         --allow-root
 
-    # Crear segundo usuario (no admin)
+    # Create second user (not admin)
     wp user create ${WP_USER} ${WP_USER_EMAIL} \
         --role=author \
         --user_pass=${WP_USER_PASSWORD} \

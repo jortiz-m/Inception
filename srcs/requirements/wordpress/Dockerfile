@@ -1,7 +1,10 @@
+# BASE IMAGE
 FROM debian:12
 
+# UPDATE SYSTEM
 RUN apt-get update
 
+# INSTALL DEPENDENCIES
 RUN apt-get install -y \
     php \
     php-fpm \
@@ -13,22 +16,22 @@ RUN apt-get install -y \
     wget \
     mariadb-client
 
-# Descargar WP-CLI
+# Download WP-CLI
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
     mv wp-cli.phar /usr/local/bin/wp
 
-# Crear directorioy
+# Create directory
 RUN mkdir -p /var/www/html/wordpress
 
-# Copiar configuración de PHP-FPM
+# Copy PHP-FPM configuration
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-# Copiar script de inicio
+# Copy start script
 COPY conf/start.sh /start.sh
 
-# Dar permisos de ejecución
+# Give execution permissions to the script
 RUN chmod +x /start.sh
 
-# Ejecutar el script al iniciar
+# Run the script when the container starts
 CMD ["/start.sh"]

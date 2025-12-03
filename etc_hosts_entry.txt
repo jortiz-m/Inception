@@ -1,8 +1,0 @@
-# Backup your current /etc/hosts before applying
-# Replace <IP_VM> with the VM IP (run: hostname -I | awk '{print $1}')
-
-# Add this line to map the domain to your VM
-<IP_VM>  jortiz-m.42.fr
-
-# Example:
-# 192.168.56.101  jortiz-m.42.fr

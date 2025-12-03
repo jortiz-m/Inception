@@ -1,17 +1,17 @@
 ROUTE = ./srcs/docker-compose.yml
 
-# Colores
+# Colors
 GREEN = \033[0;32m
 BLUE = \033[0;34m
 YELLOW = \033[0;33m
-NC = \033[0m# No Color (reset)
+NC = \033[0m
 
 up:
 	@mkdir -p /home/jortiz-m/data/mariadb
 	@mkdir -p /home/jortiz-m/data/wordpress
 	@chmod 777 /home/jortiz-m/data/mariadb
 	@chmod 777 /home/jortiz-m/data/wordpress
-	@docker compose -f $(ROUTE) up
+	@docker compose -f $(ROUTE) up -d
 
 down:
 	@docker compose -f $(ROUTE) down
@@ -38,19 +38,3 @@ ls:
 
 	@echo "$(YELLOW)VOLUMES$(NC)"
 	@docker volume ls
-
-
-# docker compose up
-# 	- flag: --build
-# docker compose down
-# 	- flag: -v
-# 
-# docker rmi <imagen> -> borra imagenes
-# docker rm <contenedor> -> borra contenedores
-# 
-# docker ps -> te muestra contenedores activos
-# 	- flags: -a
-# docker images -> te muestra imagenes creadas
-# 	- flags: -a
-# docker volume ls -> te muestra volumenes creados
-

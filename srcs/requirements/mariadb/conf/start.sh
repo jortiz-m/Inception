@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Iniciar MariaDB en segundo plano
+# Start MariaDB in the background
 mysqld_safe &
 
-# Esperar a que esté listo
+# Wait for it to be ready
 sleep 5
 
-# Crear base de datos y usuario usando variables de entorno
+# Create database and user using environment variables
 mysql -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};"
 mysql -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';"
 mysql -e "FLUSH PRIVILEGES;"
 
-# Parar MariaDB
+# Stop MariaDB
 mysqladmin shutdown
 
-# Reiniciar en primer plano
+# Restart in the foreground
 mysqld_safe

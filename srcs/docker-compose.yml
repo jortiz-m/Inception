@@ -1,7 +1,7 @@
 services:
   nginx:
     container_name: nginx
-    build: ./requeriments/nginx
+    build: ./requirements/nginx
     ports:
       - "443:443"
     restart: on-failure
@@ -14,7 +14,7 @@ services:
 
   mariadb:
     container_name: mariadb
-    build: ./requeriments/mariadb
+    build: ./requirements/mariadb
     restart: on-failure
     networks:
       - inception
@@ -28,7 +28,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    build: ./requeriments/wordpress
+    build: ./requirements/wordpress
     restart: on-failure
     depends_on:
       - mariadb
@@ -60,6 +60,7 @@ volumes:
       type: none
       o: bind
       device: /home/jortiz-m/data/mariadb
+      
   wordpress_data:
     driver: local
     driver_opts:
