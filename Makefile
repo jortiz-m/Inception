@@ -7,7 +7,10 @@ YELLOW = \033[0;33m
 RED = \033[0;31m
 NC = \033[0m
 
-up:
+build:
+	@docker compose -f $(ROUTE) build
+
+up: build
 	@mkdir -p /home/jortiz-m/data/mariadb
 	@mkdir -p /home/jortiz-m/data/wordpress
 	@chmod 777 /home/jortiz-m/data/mariadb
